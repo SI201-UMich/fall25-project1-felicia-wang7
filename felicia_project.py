@@ -65,3 +65,11 @@ def read_penguins(csv_file):
             data.append(record)
     return data
 
+def filter_rows(data, key, value):
+    """ Keep rows where row.get(key) == value """
+    out = []
+    for row in data:
+        if key in row:
+            if row[key] == value:
+                out.append(row)
+    return out
