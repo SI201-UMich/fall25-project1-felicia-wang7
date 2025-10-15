@@ -73,3 +73,45 @@ def filter_rows(data, key, value):
             if row[key] == value:
                 out.append(row)
     return out
+
+def group_conditional_counts(rows, group_key, cond_key, op, threshold):
+    """
+    Count denominators and numerators per group.
+    - Denominator: rows with non-missing group and valid numeric cond_key
+    - Numerator: among denominator rows, those satisfying condition
+    """
+    den = {}
+    num = {}
+    for row in rows:
+        if group_key not in row:
+            continue
+        group = row[group_key]
+        if group is None or group == "":
+            continue
+        # fetch value for condition
+        if cond_key not in row:
+            continue
+        value = row[cond_key]
+        if value is None:
+            continue
+        # ensure group keys exist
+        if group not in den:
+            den[group] = 0
+        if group not in num:
+            num[group] = 0
+        # denominator
+        den[group] = den[group] + 1
+        # operator check
+        cond_true = False
+        if op == ">":
+            if value > threshold:
+                cond_true = True
+        elif op == "<":
+            if value < threshold:
+                cond_true = True
+        else:
+            # unsupported op; treat as false
+            cond_true = False
+        if cond_true:
+            num[group] = num[group] + 1
+    return den, num
