@@ -115,3 +115,20 @@ def group_conditional_counts(rows, group_key, cond_key, op, threshold):
         if cond_true:
             num[group] = num[group] + 1
     return den, num
+
+def compute_percentages(num_counts, den_counts):
+    """ Convert counts to percentages per group. If denominator is 0, percent = 0.0 """
+    result = {}
+    for g in den_counts:
+        den = den_counts[g]
+        if den == 0:
+            pct = 0.0
+        else:
+            # get numerator; may be absent
+            if g in num_counts:
+                n = num_counts[g]
+            else:
+                n = 0
+            pct = (n * 100.0) / float(den)
+        result[g] = pct
+    return result
