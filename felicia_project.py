@@ -148,3 +148,26 @@ def write_dict_to_csv(d, out_path):
             except:
                 pct_str = "0.00"
             writer.writerow([k, pct_str])
+
+def percent_fem_bill_over_40_by_island(penguin_data):
+    """
+    Compute {island: % FEMALE with bill_length_mm > 40}
+    Uses columns: sex, bill_length_mm, island
+    """
+    females = filter_rows(penguin_data, "sex", "FEMALE")
+    den, num = group_conditional_counts(
+        females, group_key="island", cond_key="bill_length_mm", op=">", threshold=40.0
+    )
+    return compute_percentages(num, den)
+
+
+def percent_male_flip_under_180_by_species(penguin_data):
+    """
+    Compute {species: % MALE with flipper_length_mm < 180}
+    Uses columns: sex, flipper_length_mm, species
+    """
+    males = filter_rows(penguin_data, "sex", "MALE")
+    den, num = group_conditional_counts(
+        males, group_key="species", cond_key="flipper_length_mm", op="<", threshold=180.0
+    )
+    return compute_percentages(num, den)
