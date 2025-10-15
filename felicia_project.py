@@ -2,7 +2,7 @@
 # ID: 62645970
 # Email: wangfeli@umich.edu
 # Collaborators: Huy Pham, John (Yohan) Park
-# Asked ChatGPT for hints and guidance on the structure
+# Asked ChatGPT for guidance and comments on how to structure each function
 
 import csv
 import os
@@ -124,7 +124,7 @@ def compute_percentages(num_counts, den_counts):
         if den == 0:
             pct = 0.0
         else:
-            # get numerator; may be absent
+            # get numerator (may be absent)
             if g in num_counts:
                 n = num_counts[g]
             else:
@@ -180,9 +180,7 @@ def main():
         base = os.path.abspath(os.path.dirname(__file__))
         csv_file = os.path.join(base, csv_file)
 
-
     data = read_penguins(csv_file)
-
 
     # Problem A
     fem_by_island = percent_fem_bill_over_40_by_island(data)
@@ -191,14 +189,12 @@ def main():
         out_a = os.path.join(os.path.abspath(os.path.dirname(__file__)), out_a)
     write_dict_to_csv(fem_by_island, out_a)
 
-
     # Problem B
     male_by_species = percent_male_flip_under_180_by_species(data)
     out_b = os.environ.get("OUT_B", "percent_male_flip_under_180_by_species.csv")
     if not os.path.isabs(out_b):
         out_b = os.path.join(os.path.abspath(os.path.dirname(__file__)), out_b)
     write_dict_to_csv(male_by_species, out_b)
-
 
     # Print to console
     print("=== Percent_fem_bill_over_40_by_island ===")
@@ -207,7 +203,6 @@ def main():
     print("=== Percent_male_flip_under_180_by_species ===")
     for k in sorted(male_by_species.keys()):
         print(k + ":", "{:.2f}".format(male_by_species[k]))
-
 
 if __name__ == "__main__":
     main()
