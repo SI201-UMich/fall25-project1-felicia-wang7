@@ -132,3 +132,19 @@ def compute_percentages(num_counts, den_counts):
             pct = (n * 100.0) / float(den)
         result[g] = pct
     return result
+
+def write_dict_to_csv(d, out_path):
+    """ Write a two-column CSV: group, percent (rounded to 2 decimals in file) """
+    # stable order by key (alphabetical)
+    keys = sorted(d.keys())
+    with open(out_path, "w", newline="") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["group", "percent"])
+        for k in keys:
+            # keep file values with two decimal places for readability
+            pct = d[k]
+            try:
+                pct_str = "{:.2f}".format(float(pct))
+            except:
+                pct_str = "0.00"
+            writer.writerow([k, pct_str])
