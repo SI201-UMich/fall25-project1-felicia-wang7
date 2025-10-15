@@ -171,3 +171,43 @@ def percent_male_flip_under_180_by_species(penguin_data):
         males, group_key="species", cond_key="flipper_length_mm", op="<", threshold=180.0
     )
     return compute_percentages(num, den)
+
+def main():
+    # Determine input file path from environment or default
+    csv_file = os.environ.get("PENGUINS_CSV_PATH", "penguins.csv")
+    if not os.path.isabs(csv_file):
+        # resolve relative to script directory
+        base = os.path.abspath(os.path.dirname(__file__))
+        csv_file = os.path.join(base, csv_file)
+
+
+    data = read_penguins(csv_file)
+
+
+    # Problem A
+    fem_by_island = percent_fem_bill_over_40_by_island(data)
+    out_a = os.environ.get("OUT_A", "percent_fem_bill_over_40_by_island.csv")
+    if not os.path.isabs(out_a):
+        out_a = os.path.join(os.path.abspath(os.path.dirname(__file__)), out_a)
+    write_dict_to_csv(fem_by_island, out_a)
+
+
+    # Problem B
+    male_by_species = percent_male_flip_under_180_by_species(data)
+    out_b = os.environ.get("OUT_B", "percent_male_flip_under_180_by_species.csv")
+    if not os.path.isabs(out_b):
+        out_b = os.path.join(os.path.abspath(os.path.dirname(__file__)), out_b)
+    write_dict_to_csv(male_by_species, out_b)
+
+
+    # Print to console
+    print("=== Percent_fem_bill_over_40_by_island ===")
+    for k in sorted(fem_by_island.keys()):
+        print(k + ":", "{:.2f}".format(fem_by_island[k]))
+    print("=== Percent_male_flip_under_180_by_species ===")
+    for k in sorted(male_by_species.keys()):
+        print(k + ":", "{:.2f}".format(male_by_species[k]))
+
+
+if __name__ == "__main__":
+    main()
